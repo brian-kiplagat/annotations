@@ -24,51 +24,16 @@
 
         .annotation {
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #ccc;
-            padding: 5px;
-            cursor: grab;
-            min-width: 100px;
-            font-size: 14px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .annotation textarea {
-            width: 200px;
-            height: auto;
-            border: none;
-            background: transparent;
-            outline: none;
-            resize: none;
-            font-size: 14px;
-            overflow: hidden;
-            min-height: 20px;
-        }
-
-        .annotation:focus-within {
-            border-color: #007bff;
-        }
-
-        .delete-btn {
             cursor: pointer;
-            background: red;
-            color: white;
-            border: none;
-            font-size: 12px;
-            padding: 2px 5px;
-            border-radius: 3px;
-            position: absolute;
-            top: 2px;
-            right: 2px;
+            transform: translate(-50%, -50%);
         }
 
         .avatar-group {
             margin-top: 2rem;
             display: flex;
             justify-content: start;
+            position: relative;
+            z-index: 1;
         }
 
         .avatar-group .avatar {
@@ -111,10 +76,13 @@
             aspect-ratio: 1 / 1;
         }
 
+
+
         img {
             overflow-clip-margin: content-box;
             overflow: clip;
         }
+
 
         .pull-up {
             transition: all .25s ease;
@@ -144,6 +112,176 @@
             overflow-clip-margin: content-box;
             overflow: clip;
         }
+
+        .chat-container {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            margin-left: 10px;
+            width: 320px;
+            background: #2C2C2C;
+            border-radius: 8px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #3D3D3D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .chat-header-actions button {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .chat-messages {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+        }
+
+        .message-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #7B61FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex-grow: 1;
+        }
+
+        .message-header {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .message-author {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .message-time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .message-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #E0E0E0;
+        }
+
+        .message-reactions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .reaction {
+            background: #3D3D3D;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pin-annotation {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-input {
+            padding: 0px;
+
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .text-input-wrapper {
+            display: flex;
+            gap: 2px;
+            flex-grow: 1;
+            background: #3D3D3D;
+            border-radius: 12px;
+            padding: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+
+
+
+        .input-wrapper input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            color: white;
+            border-radius: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-wrapper button {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .scroll-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: #999;
+        }
     </style>
 
 
@@ -151,21 +289,86 @@
 
 
 <body>
-    <div id="pin-annotation">
-        <div class="avatar-group">
-            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-9.e2785e7a.jpg"
-                    alt="avatarImg" height="33" width="33"></div>
-            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-6.974f64da.jpg"
-                    alt="avatarImg" height="33" width="33"></div>
-            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-8.e9b18971.jpg"
-                    alt="avatarImg" height="33" width="33"></div>
-            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-7.ba3f6823.jpg"
-                    alt="avatarImg" height="33" width="33"></div>
+    <div id="annotation-wrapper">
 
+
+        <div id="pin-annotation">
+            <div class="avatar-group">
+                <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-9.e2785e7a.jpg"
+                        alt="avatarImg" height="33" width="33"></div>
+                <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-6.974f64da.jpg"
+                        alt="avatarImg" height="33" width="33"></div>
+
+
+            </div>
         </div>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-header-title">Comment</div>
+                <div class="chat-header-actions">
+                    <button>•••</button>
+                    <button><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M7 2C6.44772 2 6 2.44772 6 3V4H3V5H4V11.5C4 12.3284 4.67157 13 5.5 13H11.5C12.3284 13 13 12.3284 13 11.5V5H14V4H11V3C11 2.44772 10.5523 2 10 2H7ZM10 4V3H7V4H10ZM5 11.5V5H12V11.5C12 11.7761 11.7761 12 11.5 12H5.5C5.22386 12 5 11.7761 5 11.5Z"
+                                fill="#999" />
+                        </svg>
+                    </button>
+                    <button>×</button>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <div class="chat-message">
+                    <div class="message-avatar">F</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">Finsweet Client-First</span>
+                            <span class="message-time">7 months ago</span>
+                        </div>
+                        <div class="message-text">
+                            Robert Kibet Keegan Leary new top bar with "Solution name" breadcrumb and new button for
+                            subscription
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-message">
+                    <div class="message-avatar">R</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">Robert Kibet</span>
+                            <span class="message-time">7 months ago</span>
+                        </div>
+                        <div class="message-text">
+                            Finsweet Client-First please include variant when license subscription is valid
+                        </div>
+                        <div class="message-reactions">
+                            <div class="reaction">
+                                <span>👍</span>
+                                <span>1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Reply...">
+                    <button class="scroll-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 12L3 7L4.4 5.55L8 9.15L11.6 5.55L13 7L8 12Z" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+
     <h2>Click anywhere on the image to add an annotation</h2>
+
+
 
     <div id="annotation-container">
         <img id="background-image" src="static/mountain.jpg" />
@@ -178,7 +381,7 @@
         let annotations = JSON.parse(localStorage.getItem("annotations")) || [];
 
         // Function to create annotation
-        function createAnnotation(xPercent, yPercent, text = "") {
+        function createAnnotation(xPercent, yPercent) {
             const annotation = document.createElement("div");
             annotation.className = "annotation";
 
@@ -186,34 +389,10 @@
             annotation.style.left = `${xPercent * image.clientWidth}px`;
             annotation.style.top = `${yPercent * image.clientHeight}px`;
 
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
+            // Create pin annotation with avatars
+            domOperation(xPercent, yPercent);
 
-            // Auto-grow functionality
-            textarea.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = this.scrollHeight + 'px';
-            });
-
-            // Initial height adjustment
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
-
-            annotation.appendChild(textarea);
-
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "x";
-            deleteBtn.className = "delete-btn";
-            deleteBtn.onclick = () => {
-                annotations = annotations.filter(a => a.x !== xPercent || a.y !== yPercent);
-                localStorage.setItem("annotations", JSON.stringify(annotations));
-                annotation.remove();
-            };
-
-            annotation.appendChild(deleteBtn);
             container.appendChild(annotation);
-
-            enableDrag(annotation, xPercent, yPercent);
         }
 
         // Click to add annotation
@@ -278,6 +457,160 @@
         window.addEventListener("resize", () => {
             document.querySelectorAll(".annotation").forEach(annotation => annotation.remove());
             annotations.forEach(({ x, y, text }) => createAnnotation(x, y, text));
+        });
+
+        const domOperation = (xPercent, yPercent) => {
+            const pinId = `pin-${Date.now()}`;
+
+            // Create pin annotation with avatar group
+            const pinAnnotation = document.createElement("div");
+            pinAnnotation.id = pinId;
+            pinAnnotation.className = "pin-annotation";
+            pinAnnotation.style.position = "absolute";
+            pinAnnotation.style.left = `${xPercent * image.clientWidth}px`;
+            pinAnnotation.style.top = `${yPercent * image.clientHeight}px`;
+            pinAnnotation.style.transform = "translate(-50%, -50%)";
+            pinAnnotation.style.cursor = "pointer";
+
+            // Create avatar group
+            const avatarGroup = document.createElement("div");
+            avatarGroup.className = "avatar-group";
+
+            const avatars = [
+                "static/avatar-s-9.e2785e7a.jpg",
+                "static/avatar-s-6.974f64da.jpg",
+                "static/avatar-s-8.e9b18971.jpg",
+                "static/avatar-s-7.ba3f6823.jpg"
+            ];
+
+            avatars.forEach(avatarSrc => {
+                const avatarDiv = document.createElement("div");
+                avatarDiv.className = "avatar pull-up";
+                avatarDiv.setAttribute("placement", "bottom");
+
+                const avatarImg = document.createElement("img");
+                avatarImg.src = avatarSrc;
+                avatarImg.alt = "avatarImg";
+                avatarImg.height = 33;
+                avatarImg.width = 33;
+
+                avatarDiv.appendChild(avatarImg);
+                avatarGroup.appendChild(avatarDiv);
+            });
+
+            pinAnnotation.appendChild(avatarGroup);
+
+            // Create chat container
+            const chatContainer = document.createElement("div");
+            chatContainer.className = "chat-container";
+            chatContainer.id = `chat-${pinId}`;
+            chatContainer.style.display = "none";
+
+            chatContainer.innerHTML = `
+                <div class="chat-header">
+                    <div class="chat-header-title">Comment</div>
+                    <div class="chat-header-actions">
+                        <button>•••</button>
+                        <button>○</button>
+                        <button class="close-chat">×</button>
+                    </div>
+                </div>
+                <div class="chat-messages">
+                    <div class="chat-message">
+                        <div class="message-avatar">F</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Finsweet Client-First</span>
+                                <span class="message-time">7 months ago</span>
+                            </div>
+                            <div class="message-text">
+                                Robert Kibet Keegan Leary new top bar with "Solution name" breadcrumb and new button for subscription
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-message">
+                        <div class="message-avatar">R</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Robert Kibet</span>
+                                <span class="message-time">7 months ago</span>
+                            </div>
+                            <div class="message-text">
+                                Finsweet Client-First please include variant when license subscription is valid
+                            </div>
+                            <div class="message-reactions">
+                                <div class="reaction">
+                                    <span>👍</span>
+                                    <span>1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                <div class="input-wrapper">
+                     <div class="avatar pull-up " placement="bottom"><img class="input-avatar" style="height: 24px; width: 24px; aspect-ratio: 1 / 1;" src="static/avatar-s-9.e2785e7a.jpg"
+                        alt="avatarImg"></div>
+                        <div class="text-input-wrapper">
+                            <input type="text" placeholder="Reply...">
+                    <button class="scroll-btn">
+
+                        <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#000" fill-opacity="1" fill-rule="nonzero" stroke="none" d="M0 12C0 5.373 5.373 0 12 0c6.627 0 12 5.373 12 12 0 6.627-5.373 12-12 12-6.627 0-12-5.373-12-12"></path><path fill="#fff" fill-opacity="1" fill-rule="evenodd" stroke="none" d="m12 5.277-5.361 5.594.722.692L11.5 7.244V18h1V7.244l4.139 4.32.722-.693z"></path></svg>
+                    </button>
+                            
+                            </div>
+                    
+                </div>
+            </div>
+                </div>
+            `;
+
+            // Add click event to show/hide chat
+            pinAnnotation.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rect = pinAnnotation.getBoundingClientRect();
+
+                // Hide all other chat containers first
+                document.querySelectorAll('.chat-container').forEach(chat => {
+                    chat.style.display = 'none';
+                });
+
+                // Show this pin's chat container
+                chatContainer.style.display = 'block';
+
+                // Check if chat would go off-screen to the right
+                const chatRect = chatContainer.getBoundingClientRect();
+                if (rect.right + chatRect.width > window.innerWidth) {
+                    // Position chat to the left of the pin instead
+                    chatContainer.style.left = 'auto';
+                    chatContainer.style.right = '100%';
+                    chatContainer.style.marginLeft = '0';
+                    chatContainer.style.marginRight = '10px';
+                } else {
+                    // Position chat to the right of the pin
+                    chatContainer.style.left = '100%';
+                    chatContainer.style.right = 'auto';
+                    chatContainer.style.marginLeft = '10px';
+                    chatContainer.style.marginRight = '0';
+                }
+            });
+
+            // Add close button functionality
+            chatContainer.querySelector('.close-chat').addEventListener('click', () => {
+                chatContainer.style.display = 'none';
+            });
+
+            // Add both elements to the annotation
+            pinAnnotation.appendChild(chatContainer);
+            container.appendChild(pinAnnotation);
+        }
+
+        // Add click handler to close all chats when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.chat-container') && !e.target.closest('.pin-annotation')) {
+                document.querySelectorAll('.chat-container').forEach(chat => {
+                    chat.style.display = 'none';
+                });
+            }
         });
 
     </script>
