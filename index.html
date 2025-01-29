@@ -29,7 +29,6 @@
         }
 
         .avatar-group {
-            margin-top: 2rem;
             display: flex;
             justify-content: start;
             position: relative;
@@ -224,6 +223,9 @@
         .pin-annotation {
             position: relative;
             z-index: 1;
+            border-radius: 20px 20px 20px 4px;
+            padding: 6px;
+            background-color: #2C2C2C;
         }
 
         .chat-input {
@@ -289,104 +291,8 @@
 
 
 <body>
-    <div id="annotation-wrapper">
-
-
-        <div id="pin-annotation">
-            <div class="avatar-group">
-                <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-9.e2785e7a.jpg"
-                        alt="avatarImg" height="33" width="33"></div>
-                <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-6.974f64da.jpg"
-                        alt="avatarImg" height="33" width="33"></div>
-
-
-            </div>
-        </div>
-
-        <div class="chat-container">
-            <div class="chat-header">
-                <div class="chat-header-title">Comment</div>
-                <div class="chat-header-actions">
-                    <button><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M3 8C3 7.44772 3.44772 7 4 7C4.55228 7 5 7.44772 5 8C5 8.55228 4.55228 9 4 9C3.44772 9 3 8.55228 3 8Z"
-                                fill="#999" />
-                            <path
-                                d="M7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8Z"
-                                fill="#999" />
-                            <path
-                                d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8Z"
-                                fill="#999" />
-                        </svg>
-                    </button>
-                    <button><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M7 2C6.44772 2 6 2.44772 6 3V4H3V5H4V11.5C4 12.3284 4.67157 13 5.5 13H11.5C12.3284 13 13 12.3284 13 11.5V5H14V4H11V3C11 2.44772 10.5523 2 10 2H7ZM10 4V3H7V4H10ZM5 11.5V5H12V11.5C12 11.7761 11.7761 12 11.5 12H5.5C5.22386 12 5 11.7761 5 11.5Z"
-                                fill="#999" />
-                        </svg>
-                    </button>
-                    <button><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M8.70714 7.99998L12.3536 4.35353L11.6465 3.64642L8.00004 7.29287L4.35359 3.64642L3.64648 4.35353L7.29293 7.99998L3.64648 11.6464L4.35359 12.3535L8.00004 8.70708L11.6465 12.3535L12.3536 11.6464L8.70714 7.99998Z"
-                                fill="#999" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="chat-messages">
-                <div class="chat-message">
-                    <div class="message-avatar">F</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Finsweet Client-First</span>
-                            <span class="message-time">7 months ago</span>
-                        </div>
-                        <div class="message-text">
-                            Robert Kibet Keegan Leary new top bar with "Solution name" breadcrumb and new button for
-                            subscription
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-message">
-                    <div class="message-avatar">R</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Robert Kibet</span>
-                            <span class="message-time">7 months ago</span>
-                        </div>
-                        <div class="message-text">
-                            Finsweet Client-First please include variant when license subscription is valid
-                        </div>
-                        <div class="message-reactions">
-                            <div class="reaction">
-                                <span>👍</span>
-                                <span>1</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input">
-                <div class="input-wrapper">
-                    <input type="text" placeholder="Reply...">
-                    <button class="scroll-btn">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 12L3 7L4.4 5.55L8 9.15L11.6 5.55L13 7L8 12Z" fill="currentColor" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 
     <h2>Click anywhere on the image to add an annotation</h2>
-
-
 
     <div id="annotation-container">
         <img id="background-image" src="static/mountain.jpg" />
@@ -501,7 +407,8 @@
                 "static/avatar-s-7.ba3f6823.jpg"
             ];
 
-            avatars.forEach(avatarSrc => {
+            const randomCount = Math.floor(Math.random() * 4) + 1; // Random number between 1 and 4
+            avatars.slice(0, randomCount).forEach(avatarSrc => {
                 const avatarDiv = document.createElement("div");
                 avatarDiv.className = "avatar pull-up";
                 avatarDiv.setAttribute("placement", "bottom");
