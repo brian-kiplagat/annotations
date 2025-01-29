@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Annotations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #annotation-container {
+            position: relative;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+
+        #background-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .annotation {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            padding: 5px;
+            cursor: grab;
+            min-width: 100px;
+            font-size: 14px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .annotation textarea {
+            width: 200px;
+            height: auto;
+            border: none;
+            background: transparent;
+            outline: none;
+            resize: none;
+            font-size: 14px;
+            overflow: hidden;
+            min-height: 20px;
+        }
+
+        .annotation:focus-within {
+            border-color: #007bff;
+        }
+
+        .delete-btn {
+            cursor: pointer;
+            background: red;
+            color: white;
+            border: none;
+            font-size: 12px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+
+        .avatar-group {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: start;
+        }
+
+        .avatar-group .avatar {
+            margin-left: -10px;
+        }
+
+        .avatar-group .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .avatar-group .avatar:hover {
+            transform: translateY(-5px);
+        }
+
+        [dir] .avatar {
+            background-color: #c3c3c3;
+            border-radius: 50%;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .avatar {
+            white-space: nowrap;
+            position: relative;
+            color: #fff;
+            display: inline-flex;
+            font-size: 1rem;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        .avatar img {
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+
+        .avatar img {
+            height: 33px;
+            width: 33px;
+            aspect-ratio: 1 / 1;
+        }
+
+        img {
+            overflow-clip-margin: content-box;
+            overflow: clip;
+        }
+
+        .pull-up {
+            transition: all .25s ease;
+        }
+
+        [dir] .avatar-group .avatar .avatar-content,
+        [dir] .avatar-group .avatar img {
+            box-shadow: 0 0 0 2px #fff, inset 0 0 0 1px rgba(34, 41, 47, .07);
+        }
+
+        [dir] .avatar img {
+            border-radius: 50%;
+        }
+
+        img,
+        svg {
+            vertical-align: middle;
+        }
+
+        *,
+        :after,
+        :before {
+            box-sizing: border-box;
+        }
+
+        img {
+            overflow-clip-margin: content-box;
+            overflow: clip;
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+    <div id="pin-annotation">
+        <div class="avatar-group">
+            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-9.e2785e7a.jpg"
+                    alt="avatarImg" height="33" width="33"></div>
+            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-6.974f64da.jpg"
+                    alt="avatarImg" height="33" width="33"></div>
+            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-8.e9b18971.jpg"
+                    alt="avatarImg" height="33" width="33"></div>
+            <div class="avatar pull-up" placement="bottom"><img class="" src="static/avatar-s-7.ba3f6823.jpg"
+                    alt="avatarImg" height="33" width="33"></div>
+
+        </div>
+    </div>
+
+    <h2>Click anywhere on the image to add an annotation</h2>
+
+    <div id="annotation-container">
+        <img id="background-image" src="static/mountain.jpg" />
+    </div>
+
+
+    <script>
+        const container = document.getElementById("annotation-container");
+        const image = document.getElementById("background-image");
+        let annotations = JSON.parse(localStorage.getItem("annotations")) || [];
+
+        // Function to create annotation
+        function createAnnotation(xPercent, yPercent, text = "") {
+            const annotation = document.createElement("div");
+            annotation.className = "annotation";
+
+            // Convert percentage back to pixels
+            annotation.style.left = `${xPercent * image.clientWidth}px`;
+            annotation.style.top = `${yPercent * image.clientHeight}px`;
+
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+
+            // Auto-grow functionality
+            textarea.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+
+            // Initial height adjustment
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+
+            annotation.appendChild(textarea);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "x";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.onclick = () => {
+                annotations = annotations.filter(a => a.x !== xPercent || a.y !== yPercent);
+                localStorage.setItem("annotations", JSON.stringify(annotations));
+                annotation.remove();
+            };
+
+            annotation.appendChild(deleteBtn);
+            container.appendChild(annotation);
+
+            enableDrag(annotation, xPercent, yPercent);
+        }
+
+        // Click to add annotation
+        container.addEventListener("click", (event) => {
+            if (event.target.closest(".annotation")) return;
+
+            // Get position as percentage
+            const xPercent = event.offsetX / image.clientWidth;
+            const yPercent = event.offsetY / image.clientHeight;
+
+            // Save annotation
+            annotations.push({ x: xPercent, y: yPercent, text: "" });
+            localStorage.setItem("annotations", JSON.stringify(annotations));
+
+            createAnnotation(xPercent, yPercent);
+        });
+
+        // Enable dragging for annotations
+        function enableDrag(element, xPercent, yPercent) {
+            let isDragging = false, startX, startY, offsetX, offsetY;
+
+            element.addEventListener("mousedown", (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                offsetX = element.offsetLeft;
+                offsetY = element.offsetTop;
+                element.style.cursor = "grabbing";
+            });
+
+            document.addEventListener("mousemove", (e) => {
+                if (!isDragging) return;
+                let newX = offsetX + (e.clientX - startX);
+                let newY = offsetY + (e.clientY - startY);
+
+                // Convert to percentages
+                let newXPercent = newX / image.clientWidth;
+                let newYPercent = newY / image.clientHeight;
+
+                element.style.left = `${newXPercent * image.clientWidth}px`;
+                element.style.top = `${newYPercent * image.clientHeight}px`;
+
+                // Update stored annotation position
+                annotations = annotations.map(a =>
+                    (a.x === xPercent && a.y === yPercent) ? { ...a, x: newXPercent, y: newYPercent } : a
+                );
+                localStorage.setItem("annotations", JSON.stringify(annotations));
+            });
+
+            document.addEventListener("mouseup", () => {
+                isDragging = false;
+                element.style.cursor = "grab";
+            });
+        }
+
+        // Reload annotations on page load
+        window.addEventListener("load", () => {
+            annotations.forEach(({ x, y, text }) => createAnnotation(x, y, text));
+        });
+
+        // Recalculate positions on window resize
+        window.addEventListener("resize", () => {
+            document.querySelectorAll(".annotation").forEach(annotation => annotation.remove());
+            annotations.forEach(({ x, y, text }) => createAnnotation(x, y, text));
+        });
+
+    </script>
+
+</body>
+
+</html>
