@@ -379,8 +379,13 @@
 
         // Recalculate positions on window resize
         window.addEventListener("resize", () => {
-            document.querySelectorAll(".annotation").forEach(annotation => annotation.remove());
-            annotations.forEach(({ x, y, text }) => createAnnotation(x, y, text));
+            // Remove all existing pin annotations from the DOM
+            document.querySelectorAll(".pin-annotation").forEach(pin => pin.remove());
+
+            // Recreate pins from stored annotations
+            annotations.forEach(({ x, y }) => {
+                domOperation(x, y);
+            });
         });
 
         const domOperation = (xPercent, yPercent) => {
